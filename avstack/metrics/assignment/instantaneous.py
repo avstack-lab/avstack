@@ -63,9 +63,11 @@ class ConfusionMatrix(NamedTuple):
 
 class OspaMetric:
     @staticmethod
-    def _cost(list_shorter: list, list_longer: list, p: float = 1.0, c: float = 1.0):
+    def _cost(list_shorter: list, list_longer: list, p: float = 1.0, c: float = 1.0) -> float:
         n = len(list_longer)
         m = len(list_shorter)
+        if n == 0:
+            return 0.0
         A = np.array(
             [[np.linalg.norm(l1 - l2) for l1 in list_shorter] for l2 in list_longer]
         )
@@ -78,7 +80,7 @@ class OspaMetric:
         return distance
 
     @staticmethod
-    def cost(tracks: list, truths: list, p: float = 1.0, c: float = 1.0):
+    def cost(tracks: list, truths: list, p: float = 1.0, c: float = 1.0) -> float:
         if len(tracks) <= len(truths):
             return OspaMetric._cost(tracks, truths, p=p, c=c)
         else:
